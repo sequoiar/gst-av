@@ -8,8 +8,9 @@ override CFLAGS += -D_GNU_SOURCE -DGST_DISABLE_DEPRECATED
 GST_CFLAGS := $(shell pkg-config --cflags gstreamer-0.10 gstreamer-tag-0.10)
 GST_LIBS := $(shell pkg-config --libs gstreamer-0.10 gstreamer-tag-0.10)
 
+AVCODEC_DIR := $(shell pkg-config --variable=prefix libavcodec)
 AVCODEC_CFLAGS := $(shell pkg-config --cflags libavcodec libavutil)
-AVCODEC_LIBS := $(shell pkg-config --libs libavcodec libavutil)
+AVCODEC_LIBS := -pthread $(AVCODEC_DIR)/lib/libavcodec.a $(AVCODEC_DIR)/lib/libavutil.a -lm
 
 all:
 
