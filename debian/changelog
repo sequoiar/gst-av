@@ -1,3 +1,10 @@
+gst-av (0.5-1) fremantle; urgency=low
+
+  * Disable existing codecs
+  * Add vp8 video codec
+
+ -- Felipe Contreras <felipe.contreras@gmail.com>  Wed, 04 May 2011 16:40:28 +0300
+
 gst-av (0.5) fremantle; urgency=low
 
   * Initial release.
