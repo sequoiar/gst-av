@@ -1,0 +1,20 @@
+Source: gst-av
+Section: libs
+Priority: optional
+Maintainer: Felipe Contreras <felipe.contreras@gmail.com>
+Build-Depends: debhelper (>= 5), libgstreamer0.10-dev, libgstreamer-plugins-base0.10-dev,
+  libavutil-mini-dev, libavcodec-mini-dev
+Standards-Version: 3.9.1
+
+Package: gstreamer0.10-av
+Architecture: armel
+Section: libs
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: GStreamer plug-in for libav.
+
+Package: gstreamer0.10-av-dbg
+Section: debug
+Priority: extra
+Architecture: armel
+Depends: ${misc:Depends}, gstreamer0.10-av (= ${binary:Version})
+Description: Debug symbols for gst-av.
