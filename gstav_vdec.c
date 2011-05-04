@@ -317,6 +317,9 @@ generate_sink_template(void)
 
 	caps = gst_caps_new_empty();
 
+	/* disable on maemo */
+#if 0
+
 	struc = gst_structure_new("video/x-h263",
 			NULL);
 
@@ -352,6 +355,8 @@ generate_sink_template(void)
 			NULL);
 
 	gst_caps_append_structure(caps, struc);
+
+#endif
 
 	struc = gst_structure_new("video/x-vp8",
 			NULL);
