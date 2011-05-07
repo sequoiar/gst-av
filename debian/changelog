@@ -1,3 +1,9 @@
+gst-av (0.5-2) fremantle; urgency=low
+
+  * Fix buffer overwrites
+
+ -- Felipe Contreras <felipe.contreras@gmail.com>  Sat, 07 May 2011 22:17:44 +0300
+
 gst-av (0.5-1) fremantle; urgency=low
 
   * Disable existing codecs
