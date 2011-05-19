@@ -7,24 +7,25 @@
  * License version 2.1.
  */
 
-#ifndef GST_AV_VDEC_H
-#define GST_AV_VDEC_H
+#ifndef GST_AV_VENC_H
+#define GST_AV_VENC_H
 
 #include <gst/gst.h>
 #include <libavcodec/avcodec.h>
 #include <stdbool.h>
 
-#define GST_AV_VDEC_TYPE (gst_av_vdec_get_type())
+#define GST_AV_VENC_TYPE (gst_av_venc_get_type())
 
-GType gst_av_vdec_get_type(void);
+GType gst_av_venc_get_type(void);
 
-struct gst_av_vdec {
+struct gst_av_venc {
 	GstElement element;
 	GstPad *sinkpad, *srcpad;
 	AVCodec *codec;
 	AVCodecContext *av_ctx;
 	bool initialized;
-	bool (*parse_func)(struct gst_av_vdec *vdec, GstBuffer *buf);
+	int codec_id;
+	void (*init_ctx)(struct gst_av_venc *base, AVCodecContext *ctx);
 };
 
-#endif /* GST_AV_VDEC_H */
+#endif /* GST_AV_VENC_H */
