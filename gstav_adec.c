@@ -411,14 +411,6 @@ generate_sink_template(void)
 
 	gst_caps_append_structure(caps, struc);
 
-	struc = gst_structure_new("audio/mpeg",
-			"mpegversion", G_TYPE_INT, 1,
-			"layer", G_TYPE_INT, 3,
-			"parsed", G_TYPE_BOOLEAN, TRUE,
-			NULL);
-
-	gst_caps_append_structure(caps, struc);
-
 	return caps;
 }
 
