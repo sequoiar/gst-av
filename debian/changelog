@@ -1,3 +1,9 @@
+gst-av (0.5-6) fremantle; urgency=low
+
+  * Fake update to rebuild against libav-mini 0.7b2
+
+ -- Felipe Contreras <felipe.contreras@gmail.com>  Mon, 23 May 2011 17:12:59 +0300
+
 gst-av (0.5-5) fremantle; urgency=low
 
   * Fix regression in flac decoder
