@@ -41,8 +41,6 @@ static GstBuffer *convert_frame(struct obj *self, AVFrame *frame)
 	out_buf = gst_buffer_new_and_alloc(ctx->width * ctx->height * 3 / 2);
 	gst_buffer_set_caps(out_buf, self->srcpad->caps);
 
-	for (i = 0; i < ctx->height * ctx->width * 3 / 2; i++)
-		out_buf->data[i] = 0;
 	p = out_buf->data;
 	for (i = 0; i < ctx->height; i++)
 		memcpy(p + i * ctx->width, frame->data[0] + i * frame->linesize[0], ctx->width);
@@ -75,7 +73,7 @@ pad_chain(GstPad *pad, GstBuffer *buf)
 		GstStructure *struc;
 
 		self->initialized = true;
-		if (avcodec_open(ctx, self->codec) < 0) {
+		if (gst_av_codec_open(ctx, self->codec) < 0) {
 			ret = GST_FLOW_ERROR;
 			goto leave;
 		}
@@ -162,7 +160,7 @@ change_state(GstElement *element, GstStateChange transition)
 	switch (transition) {
 	case GST_STATE_CHANGE_READY_TO_NULL:
 		if (self->av_ctx) {
-			avcodec_close(self->av_ctx);
+			gst_av_codec_close(self->av_ctx);
 			av_freep(&self->av_ctx);
 		}
 		break;

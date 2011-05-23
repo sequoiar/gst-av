@@ -150,6 +150,16 @@ vorbis_header(struct obj *self, GstBuffer *buf)
 	return 1;
 }
 
+static int
+flac_header(struct obj *self, GstBuffer *buf)
+{
+	unsigned type = (buf->data[0] & 0x7F);
+	/* frame sync code */
+	if (type == 127)
+		return 0;
+	return 1;
+}
+
 static inline void
 calculate_timestamp(struct obj *self, GstBuffer *out_buf)
 {
@@ -175,7 +185,7 @@ pad_chain(GstPad *pad, GstBuffer *buf)
 		int hdr = self->header_func(self, buf);
 		if (!hdr) {
 			self->got_header = true;
-			if (avcodec_open(self->av_ctx, self->codec) < 0) {
+			if (gst_av_codec_open(self->av_ctx, self->codec) < 0) {
 				ret = GST_FLOW_ERROR;
 				goto leave;
 			}
@@ -285,7 +295,7 @@ change_state(GstElement *element, GstStateChange transition)
 	switch (transition) {
 	case GST_STATE_CHANGE_READY_TO_NULL:
 		if (self->av_ctx) {
-			avcodec_close(self->av_ctx);
+			gst_av_codec_close(self->av_ctx);
 			av_freep(&self->av_ctx);
 		}
 		av_free_packet(&self->pkt);
@@ -345,6 +355,7 @@ sink_setcaps(GstPad *pad, GstCaps *caps)
 		GstBuffer *buf;
 
 		codec_id = CODEC_ID_FLAC;
+		self->header_func = flac_header;
 
 		stream_header = gst_structure_get_value(in_struc, "streamheader");
 		if (!stream_header)
