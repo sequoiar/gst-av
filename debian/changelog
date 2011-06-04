@@ -1,3 +1,9 @@
+gst-av (0.5.2) fremantle; urgency=low
+
+  * Improvements for streaming
+
+ -- Felipe Contreras <felipe.contreras@gmail.com>  Sat, 04 Jun 2011 06:16:25 +0300
+
 gst-av (0.5-6) fremantle; urgency=low
 
   * Fake update to rebuild against libav-mini 0.7b2
