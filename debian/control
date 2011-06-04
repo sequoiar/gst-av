@@ -3,7 +3,7 @@ Section: libs
 Priority: optional
 Maintainer: Felipe Contreras <felipe.contreras@gmail.com>
 Build-Depends: debhelper (>= 5), libgstreamer0.10-dev, libgstreamer-plugins-base0.10-dev,
-  libavutil-mini-dev, libavcodec-mini-dev
+  libavutil-mini-dev, libavcodec-mini-dev, maemo-optify
 Standards-Version: 3.9.1
 XSBC-Bugtracker: http://code.google.com/p/gst-av/issues/
 
