@@ -1,3 +1,9 @@
+gst-av (0.5.2-1) fremantle; urgency=low
+
+  * Maemo-optify
+
+ -- Felipe Contreras <felipe.contreras@gmail.com>  Sat, 04 Jun 2011 08:42:52 +0300
+
 gst-av (0.5.2) fremantle; urgency=low
 
   * Improvements for streaming
