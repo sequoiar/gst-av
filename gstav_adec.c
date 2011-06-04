@@ -46,6 +46,7 @@ struct obj {
 	size_t buffer_size;
 	struct ring ring;
 	int (*header_func)(struct obj *self, GstBuffer *buf);
+	uint64_t next_timestamp;
 };
 
 struct obj_class {
@@ -219,19 +220,26 @@ pad_chain(GstPad *pad, GstBuffer *buf)
 		memcpy(pkt.data, buf->data, buf->size);
 		memset(pkt.data + pkt.size, 0, FF_INPUT_BUFFER_PADDING_SIZE);
 
-		if (G_UNLIKELY(self->timestamp == GST_CLOCK_TIME_NONE))
-			self->timestamp = buf->timestamp;
+		if (G_UNLIKELY(self->timestamp == GST_CLOCK_TIME_NONE)) {
+			self->next_timestamp = self->timestamp = buf->timestamp;
+		} else if (self->next_timestamp != buf->timestamp) {
+			GST_WARNING_OBJECT(self, "reseting timestamp");
+			self->next_timestamp = self->timestamp = buf->timestamp;
+		}
+
+		self->next_timestamp += buf->duration;
 
 		do {
 			void *buffer_data;
 			int buffer_size;
 			int read;
+			unsigned total_buffer_size;
 
 			buffer_data = self->buffer_data + self->ring.in;
 			buffer_size = self->buffer_size - self->ring.in;
 			read = avcodec_decode_audio3(self->av_ctx, buffer_data, &buffer_size, &pkt);
 			if (read < 0) {
-				ret = GST_FLOW_ERROR;
+				GST_WARNING_OBJECT(self, "error: %i", read);
 				break;
 			}
 
@@ -244,9 +252,14 @@ pad_chain(GstPad *pad, GstBuffer *buf)
 				self->ring.out = 0;
 			}
 
-			if (self->ring.in - self->ring.out >= BUFFER_SIZE) {
+			if (BUFFER_SIZE > 0)
+				total_buffer_size = BUFFER_SIZE;
+			else
+				total_buffer_size = buffer_size;
+
+			if (self->ring.in - self->ring.out >= total_buffer_size) {
 				GstBuffer *out_buf;
-				out_buf = gst_buffer_new_and_alloc(BUFFER_SIZE);
+				out_buf = gst_buffer_new_and_alloc(total_buffer_size);
 				memcpy(out_buf->data, self->buffer_data + self->ring.out, out_buf->size);
 				calculate_timestamp(self, out_buf);
 				gst_buffer_set_caps(out_buf, self->srcpad->caps);
